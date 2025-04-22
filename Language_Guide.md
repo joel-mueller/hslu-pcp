@@ -33,3 +33,153 @@ fmt.Printf("i has value: %v and type: %T\n", i, i) // %T and %v for value and ty
 - bool
 - int, int8, int16, int32, int64
 - float, float32, float64
+
+## Arrays
+
+### Creating and array
+
+```go
+arr1 := [6]int{10, 11, 12, 13, 14,15}
+arr2 := [5]int{4,5,6,7,8} // if not every value is initialized, the default value is set
+var arr3 = [...]string{"Volvo", "Ford", "Tesla"} // here length is inferred, but when array is defined, the size cant be changed
+arr4 := [5]int{1:10,2:40} // initalize the second and third value, the rest to default value
+```
+
+### Aarray operations
+
+```go
+fmt.Printf(arr2)
+fmt.Printf(arr3[2])
+arr3[2] = "Volkswagen" // change element
+fmt.Printf(len(arr4))
+```
+
+### Characteristics
+
+- Copy is by value
+- Fixed size
+
+## Slices
+
+### Creating a slice
+
+```go
+myslice1 := []int{}
+myslice2 := []int{1,2,3}
+myslice := arr1[2:4] // creating a slice from an array
+myslice1 := make([]int, 5, 10) // make([]type, length, capacity), if capazity is not defined, its the same as lenght
+```
+
+### Slice operations
+
+- `len()` gives the number of elements in the slice back
+- `cap()` gives the capacitry of the slice back (the number it can grow or shrink to)
+
+```go
+myslice1 = append(myslice1, 20, 21) // append(slice_name, element1, element2, ...)
+myslice3 = append(myslice1, myslice2...) // append(slice1, slice2...)
+```
+
+### Copy function usage
+
+```go
+neededNumbers := numbers[:len(numbers)-10]
+numbersCopy := make([]int, len(neededNumbers))
+copy(numbersCopy, neededNumbers)
+```
+
+### Characteristics
+
+- Copy is by refference
+- Size is flexible and can grow and shrink
+
+## Operators
+
+- [Arithmetic Operators](https://www.w3schools.com/go/go_arithmetic_operators.php)
+- [Assignment Operators](https://www.w3schools.com/go/go_assignment_operators.php)
+- [Comparisson Operators](https://www.w3schools.com/go/go_comparison_operators.php)
+- [Logical Operators](https://www.w3schools.com/go/go_logical_operators.php)
+- [Bitwise operators](https://www.w3schools.com/go/go_bitwise_operators.php)
+
+## Condition
+
+```go
+time := 22
+if time < 10 {
+  fmt.Println("Good morning.")
+} else if time < 20 {
+  fmt.Println("Good day.")
+} else {
+  fmt.Println("Good evening.")
+}
+```
+
+## Switch Statement
+
+```go
+switch day {
+case 1,3,5:
+  fmt.Println("Odd weekday")
+case 2,4:
+  fmt.Println("Even weekday")
+case 6,7:
+  fmt.Println("Weekend")
+default:
+  fmt.Println("Invalid day of day number")
+}
+```
+
+## For Loop
+
+```go
+for i:=0; i <= 100; i+=10 {
+  fmt.Println(i)
+}
+```
+
+- The continue statement is used to skip one or more iterations in the loop. It then continues with the next iteration in the loop.
+- The break statement is used to break/terminate the loop execution.
+
+### Range
+
+```go
+for idx, val := range fruits { // index, value := range array|slice|map
+   fmt.Printf("%v\t%v\n", idx, val)
+}
+```
+
+## Functions
+
+```go
+func myFunction(x int, y int) int {
+  return x + y
+}
+```
+
+### Named return values
+
+```go
+func myFunction(x int, y int) (result int) {
+  result = x + y
+  return
+}
+```
+
+### Multiple return values
+
+```go
+func myFunction(x int, y string) (result int, txt1 string) {
+  result = x + x
+  txt1 = y + " World!"
+  return
+}
+
+func main() {
+  a, b := myFunction(5, "Hello")
+  fmt.Println(a, b)
+}
+```
+
+## Go Structs
+
+

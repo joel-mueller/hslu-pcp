@@ -2,7 +2,6 @@ package main
 import ("fmt")
 
 func main() {
-    const HELLO string = "Hello"
-    const WORLD string = "World"
-    fmt.Println(HELLO, WORLD, "\n")
+var arr3 = [...]string{"Volvo", "Ford", "Tesla"} // here length is inferred
+fmt.Printf(arr3[2])
 }
