@@ -182,4 +182,90 @@ func main() {
 
 ## Go Structs
 
+```shell
+package main
+import ("fmt")
 
+type Person struct {
+  name string
+  age int
+  job string
+  salary int
+}
+
+func main() {
+  var pers1 Person
+  var pers2 Person
+
+  // Pers1 specification
+  pers1.name = "Hege"
+  pers1.age = 45
+  pers1.job = "Teacher"
+  pers1.salary = 6000
+
+  // Pers2 specification
+  pers2.name = "Cecilie"
+  pers2.age = 24
+  pers2.job = "Marketing"
+  pers2.salary = 4500
+
+  // Print Pers1 info by calling a function
+  printPerson(pers1)
+
+  // Print Pers2 info by calling a function
+  printPerson(pers2)
+}
+
+func printPerson(pers Person) {
+  fmt.Println("Name: ", pers.name)
+  fmt.Println("Age: ", pers.age)
+  fmt.Println("Job: ", pers.job)
+  fmt.Println("Salary: ", pers.salary)
+}
+```
+
+## Maps
+
+Make maps with `var` and `:=`
+
+```shell
+var a = map[string]string{"brand": "Ford", "model": "Mustang", "year": "1964"}
+b := map[string]int{"Oslo": 1, "Bergen": 2, "Trondheim": 3, "Stavanger": 4}
+fmt.Printf("a\t%v\n", a)
+fmt.Printf("b\t%v\n", b)
+```
+
+Using the `make()` function
+
+```shell
+var a = make(map[string]string) // The map is empty now
+a["brand"] = "Ford"
+a["model"] = "Mustang"
+a["year"] = "1964"
+```
+
+> Note: Always use `make()` to create an empty map. Doing it in a different way will end up in a runtime panic
+
+### Allowed Types in Map
+
+As key is everything allowed except: (this is because the equality oparator for comparing with `==` is there not defined)
+- Slices
+- Maps
+- Functions
+
+As value is everything allowed
+
+### Operations in Map
+
+```shell
+fmt.Printf(a["brand"]) // get an entry
+a["year"] = "1970" // update an entry
+delete(a,"year") // deleting an entry
+val3, ok3 := a["day"] // Checking for existing key and its value
+_, ok4 := a["model"] // Only checking for existing key and not its value
+
+// Iterate over maps
+for k, v := range a {
+    fmt.Printf("%v : %v, ", k, v)
+}
+```
