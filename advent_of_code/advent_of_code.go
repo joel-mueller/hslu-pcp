@@ -1,7 +1,5 @@
 package advent_of_code
 
-import "fmt"
-
 func Advent(start []int, steps int) int {
 	var storage = make(map[int]int)
 	for i := 0; i < 9; i++ {
@@ -19,8 +17,6 @@ func Advent(start []int, steps int) int {
 		storage[6] = storage[6] + zeros
 		storage[8] = zeros
 	}
-
-	fmt.Printf("%v \n", storage)
 
 	size := 0
 	for i := 0; i < 9; i++ {

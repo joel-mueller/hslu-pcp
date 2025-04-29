@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-	"hslu-pcp/advent_of_code"
+	"hslu-pcp/language_detection"
 )
 
 func main() {
-	start := []int{3, 4, 3, 1, 2}
-	fmt.Println(advent_of_code.Advent(start, 80))
-	fmt.Println(advent_of_code.Advent(start, 256))
+	fmt.Println(string(rune(65)))
+	fmt.Println(language_detection.LanguageDetection("aAZz"))
 }
