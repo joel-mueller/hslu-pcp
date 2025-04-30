@@ -1,4 +1,4 @@
-package advent_of_code
+package AdventOfCode
 
 func Advent(start []int, steps int) int {
 	var storage = make(map[int]int)

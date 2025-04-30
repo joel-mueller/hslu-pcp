@@ -1,10 +1,10 @@
-package advent_of_code
+package AdventOfCode
 
 import (
 	"testing"
 )
 
-func TestExcercise1(t *testing.T) {
+func TestExercise1(t *testing.T) {
 	start := []int{3, 4, 3, 1, 2}
 	number := Advent(start, 80)
 	if number != 5934 {
@@ -12,7 +12,7 @@ func TestExcercise1(t *testing.T) {
 	}
 }
 
-func TestExcercise2(t *testing.T) {
+func TestExercise2(t *testing.T) {
 	start := []int{3, 4, 3, 1, 2}
 	number := Advent(start, 256)
 	if number != 26984457539 {

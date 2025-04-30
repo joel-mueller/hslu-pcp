@@ -1,4 +1,4 @@
-package language_detection
+package LanguageDetection
 
 import (
 	"math"
@@ -12,7 +12,7 @@ func floatEquals(a, b float64) bool {
 func TestPythagoreanList(t *testing.T) {
 	list := [26]float64{3, 4}
 	expected := 5.0 // sqrt(3^2 + 4^2)
-	result := pythagorean_list(list)
+	result := pythagoreanList(list)
 	if !floatEquals(result, expected) {
 		t.Errorf("Expected %f, got %f", expected, result)
 	}
@@ -20,7 +20,7 @@ func TestPythagoreanList(t *testing.T) {
 
 func TestCosineSimilarity_Identical(t *testing.T) {
 	list := [26]float64{1, 2, 3, 4, 5}
-	result := cosine_similarity(list, list)
+	result := cosineSimilarity(list, list)
 	if !floatEquals(result, 1.0) {
 		t.Errorf("Expected cosine similarity of 1.0, got %f", result)
 	}
@@ -29,7 +29,7 @@ func TestCosineSimilarity_Identical(t *testing.T) {
 func TestCosineSimilarity_Orthogonal(t *testing.T) {
 	list1 := [26]float64{1, 0}
 	list2 := [26]float64{0, 1}
-	result := cosine_similarity(list1, list2)
+	result := cosineSimilarity(list1, list2)
 	if !floatEquals(result, 0.0) {
 		t.Errorf("Expected cosine similarity of 0.0, got %f", result)
 	}
@@ -37,7 +37,7 @@ func TestCosineSimilarity_Orthogonal(t *testing.T) {
 
 func TestGetOccurance_Lowercase(t *testing.T) {
 	text := "abc"
-	result := getOccurance(text)
+	result := getOccurrence(text)
 	expected := [26]float64{1, 1, 1}
 	for i := 0; i < 3; i++ {
 		if result[i] != expected[i] {
@@ -46,9 +46,9 @@ func TestGetOccurance_Lowercase(t *testing.T) {
 	}
 }
 
-func TestGetOccurance_Uppercase(t *testing.T) {
+func TestGetOccurrence_Uppercase(t *testing.T) {
 	text := "ABC"
-	result := getOccurance(text)
+	result := getOccurrence(text)
 	expected := [26]float64{1, 1, 1}
 	for i := 0; i < 3; i++ {
 		if result[i] != expected[i] {
