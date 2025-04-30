@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
-	fmt.Println(string(rune(65)))
-	fmt.Println(language_detection.LanguageDetection("aAZz"))
+	fmt.Println(language_detection.LanguageDetection(""))
+	fmt.Println(language_detection.LanguageDetection(""))
+	fmt.Println(language_detection.LanguageDetection(""))
 }
