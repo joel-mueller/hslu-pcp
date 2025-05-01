@@ -7,7 +7,6 @@ type Element[T any] struct {
 
 type StackList[T any] struct {
 	head *Element[T]
-	size int
 }
 
 func (stack *StackList[T]) Push(value T) {
@@ -15,7 +14,6 @@ func (stack *StackList[T]) Push(value T) {
 		value: value,
 		next:  stack.head,
 	}
-	stack.size++
 	stack.head = newElem
 }
 
@@ -25,7 +23,6 @@ func (stack *StackList[T]) Pop() (value T) {
 	}
 	value = stack.head.value
 	stack.head = stack.head.next
-	stack.size--
 	return value
 }
 
@@ -41,5 +38,11 @@ func (stack *StackList[T]) Empty() bool {
 }
 
 func (stack *StackList[T]) Size() int {
-	return stack.size
+	size := 0
+	head := stack.head
+	for head != nil {
+		head = head.next
+		size++
+	}
+	return size
 }
