@@ -1,4 +1,4 @@
-package Stack
+package Datastructures
 
 import (
 	"testing"
@@ -10,8 +10,8 @@ func TestPushAndPop(t *testing.T) {
 	s.Push(10)
 	s.Push(20)
 
-	if s.Len() != 2 {
-		t.Errorf("Expected length 2, got %d", s.Len())
+	if s.Size() != 2 {
+		t.Errorf("Expected length 2, got %d", s.Size())
 	}
 
 	val := s.Pop()
@@ -33,8 +33,8 @@ func TestPeek(t *testing.T) {
 	if s.Peek() != "world" {
 		t.Errorf("Expected 'world', got %s", s.Peek())
 	}
-	if s.Len() != 2 {
-		t.Errorf("Peek should not remove element, but length is %d", s.Len())
+	if s.Size() != 2 {
+		t.Errorf("Peek should not remove element, but length is %d", s.Size())
 	}
 }
 

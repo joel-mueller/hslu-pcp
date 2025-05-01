@@ -1,9 +1,9 @@
-Goroutines, Channels & Select
-Maps & Slices
-Structural & Nominal Typing
-The Go Memory Model
-Package Management
-Defer
+# Fokuspunkte
+
+- Defer, panic und recover
+- Goroutines, Channels & Select
+- Structural & Nominal Typing
+- The Go Memory Model
 
 Abgabe: Ihre gewählten 3 bis 7 Fokuspunkte, jeweils
 inkl. kurze Erklärung (stichwortartig, ggf. inkl.kurze

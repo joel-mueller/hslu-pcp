@@ -1,4 +1,4 @@
-package Stack
+package Datastructures
 
 type Stack[T any] struct {
 	stack []T
@@ -28,6 +28,6 @@ func (stack *Stack[T]) Empty() bool {
 	return len(stack.stack) == 0
 }
 
-func (stack *Stack[T]) Len() int {
+func (stack *Stack[T]) Size() int {
 	return len(stack.stack)
 }
