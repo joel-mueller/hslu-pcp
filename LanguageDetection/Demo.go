@@ -1,11 +1,13 @@
 package LanguageDetection
 
-import "log"
+import (
+	"fmt"
+)
 
 func RunLanguage(filename string) {
 	PathToFiles := "LanguageDetection/"
 	content := ReadFile(PathToFiles + filename)
-	log.Printf("The detected language of the file %v is %v\n", filename, LanguageDetection(content))
+	fmt.Printf("The detected language of the file %v is %v\n", filename, LanguageDetection(content))
 }
 
 func Demo() {
