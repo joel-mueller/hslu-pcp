@@ -201,36 +201,49 @@ ch2 := make(chan string)
 
 ## `defer`, `panic` und `recover`
 
-### `defer`
+### Was ist `defer` ?
 
 In go wird `defer` bei einer Funktion am ende aufgerufen und ist besonders praktisch um verbindungen zu schliessen, zum beispiel beim schreiben von einer Datei der Datenbank. `defer` wird immer aufgerufen, auch wenn die funktion eine panic oder ein error hat. Das bedeutet, selbst wenn man ein Array out of bounds error hat, wird `defer` noch aufgeufen
 
-### Wann braucht man `panic` ?
-
-`panic` wird gebraucht wenn etwas grosses unerwartetes vorliegt und das Programm nicht weiterfahren kann. `defer` wird von go zum Beispiel bei out of bounds bei einem Array gebraucht. Auch wir können `panic` brauchen, um defensiv zu programmieren und unerwartetes bemerkbar zu machen.
-
-Beide folgenden Funktionen werden eine `panic` werfen:
+Hier ein Beispiel wie wir defer gebraucht haben in der Language Detection:
 
 ```go
-func outOfBounds() {
-	arr := []int{1, 2, 3}
-	fmt.Println(arr[5])
+func ReadFile(path string) string {
+    file, err := os.Open(path)
+    if err != nil {
+        log.Fatal("Error opening file:", err)
+    }
+    defer func(file *os.File) {
+        err := file.Close()
+        if err != nil {
+            log.Fatal("Error Occurred while trying to clone the file", err)
+        }
+    }(file)
+    // lesen vom file
+```
+
+Wir haben hier eine `defer` funktion definiert, welche sicher ausgeführt wird, sobald ein file da ist und die Methoden fertig ist. Dies ist besonders praktisch, da man die dinge schliessen kann, direkt dan dem man sie geöffnet hat. So hat man besonders leserlichen code und vergisst nichts.
+
+### Wann braucht man `panic` ?
+
+In go wird `panic` gebraucht wenn etwas grosses unerwartetes vorliegt und das Programm nicht weiterfahren kann. `panic` wird von go zum Beispiel bei out of bounds bei einem Array gebraucht. Auch wir können `panic` brauchen, um defensiv zu programmieren und unerwartetes bemerkbar zu machen.
+Folgendes beispiel kommt aus dem Stack und wirft eine Panic wenn das Stack leer ist, und das oberste element gelesen werden will.
+
+```go
+func (stack *Stack[T]) Peek() T {
+    if len(stack.stack) == 0 {
+        panic("stack is empty")
+    }
+    return stack.stack[len(stack.stack)-1]
 }
 
-func myPanic() {
-	panic("something bad happened")
-}
 ```
 
 ### Wie kann man eine `panic` behandeln oder auffangen?
 
-Um eine panic aufzufangen braucht man `defer` und `recover`.
-
-
-Um die `panic` dann abzufagnen braucht man `recover`. Diese wird in der methode, welche mit `defer` aufgerufen wird eingebaut. Mit `recover` kann man dann die nachricht ausgeben.
+Um die `panic` dann abzufagnen braucht man `recover` und `defer`. Diese wird in der methode, welche mit `defer` aufgerufen wird eingebaut. Mit `recover` kann man dann die nachricht dann ausgeben.
 
 ```go
-
 func safeRun() {
     defer handlePanic()
     outOfBounds()
@@ -239,36 +252,5 @@ func handlePanic() {
     if r := recover(); r != nil {
         fmt.Println("Recovered from panic:", r)
     }
-}
-```
-
-```go
-package main
-
-import "fmt"
-
-func main() {
-safeRun()
-fmt.Println("Program continues after panic is recovered.")
-}
-
-func safeRun() {
-defer handlePanic()
-outOfBounds()
-}
-
-func handlePanic() {
-if r := recover(); r != nil {
-fmt.Println("Recovered from panic:", r)
-}
-}
-
-func outOfBounds() {
-arr := []int{1, 2, 3}
-fmt.Println(arr[5])
-}
-
-func myPanic() {
-panic("something bad happened")
 }
 ```

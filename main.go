@@ -7,6 +7,7 @@ import (
 	"hslu-pcp/Datastructures"
 	"hslu-pcp/FunctionalPatterns"
 	"hslu-pcp/LanguageDetection"
+	"hslu-pcp/Panic"
 	"hslu-pcp/Routines"
 	"os"
 	"strings"
@@ -18,6 +19,7 @@ var demos = map[string]func(){
 	"stacks":     Datastructures.Demo,
 	"functional": FunctionalPatterns.Demo,
 	"routines":   Routines.Demo,
+	"panic":      Panic.Demo,
 }
 
 func help() {
