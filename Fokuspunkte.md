@@ -9,30 +9,105 @@ Abgabe: Ihre gewählten 3 bis 7 Fokuspunkte, jeweils
 inkl. kurze Erklärung (stichwortartig, ggf. inkl.kurze
 Pseudo-Code-Sequenzen)
 
-## `The Go Memory Model`
 
-### `Goroutines and Concurrency`
+## Structural & Nominal Typing
+
+Go verwendet sowohl Structural, als auch Nominal Typing.
+
+### Nominal Typing
+
+Bei Nominal Typing werden zwei strukturen oder klassen nicht als gleich oder Kompatibel angeseehen, auch wenn sie die gleichen datentypen und Methoden haben.
+In der sprache `go` ist das bei allen primitiven datentypen und structs so. Das bedeutet, wenn ich in go eine funktion habe, welche eine struct oder ein pointer zu einer struct nimmt, dann muss ich genau eine solche struct übergeben nicht eine andere struct, welche aber die gleichen namen hat und die selben attributten.
+
+Wir haben hier zwei stacks. Eines hat intern ein slice und das andere eine Linked list. 
+
+```go
+type Stack[T any] struct {
+    stack []T
+}
+```
+
+```go
+type StackList[T any] struct {
+    head *Element[T]
+}
+```
+
+Ich schreibe eine Methode, welche die statistik über das stack ausgibt. Die Methode soll für das `Stack` funktionieren. 
+
+```go
+func GetStatsStack[T any](stack *Stack[T]) string {
+    if stack.Empty() {
+        return "The stack is empty"
+    }
+    return fmt.Sprintf("The size is %d", stack.Size())
+}
+```
+
+Ich kann die Statistik vom Stack ausgeben, aber nicht vom StackList, das es nicht der gleiche Typ ist.
+
+```go
+stack := Stack[int]{}
+stackList := StackList[int]{}
+fmt.Println(GetStatsStack(&stack))
+fmt.Println(GetStatsStack(&stackList)) // error, StackList ist nicht vom Typ Stack
+```
+
+### Structural Typing
+
+Go neben Nominal Typing, verwendet go auch structural Typing. Structural Typing wird in go aussschliesslich bei interfaces verwendet. Wenn eine struct in go die gleichen methoden, wie ein interface hat, hat die struct auch das interface.
+Wir schreiben also ein Interface, welche für Datenstrukturen gedacht ist.
+
+```go
+type Datastructures interface {
+    Empty() bool
+    Size() int
+}
+```
+
+Da sowohl `Stack` als auch `StackList` diese beiden funktionen haben, implementieren sie automaisch das Interface `Datastructure`.
+Wir schreiben also folgende Funktion, welche keines der beiden Stacks nimmt, sondern ein interface, welches die methoden besitzt, welche sowhol `Stack` als auch `StackList` implementiert hat.
+
+```go
+func GetStats(datastructures Datastructures) string {
+    if datastructures.Empty() {
+        return "The datastructures is empty"
+    }
+    return fmt.Sprintf("The size is %d", datastructures.Size())
+}
+```
+
+Die funktion kann jetyt für beide stacks benutzt werden. Siehe der Code auch im Ordner Datastructures.
+
+```go
+fmt.Println(GetStats(&stackList))
+fmt.Println(GetStats(&stack))
+```
+
+## The Go Memory Model
+
+### Goroutines and Concurrency
 
 - Go verwendet *goroutines* für leichtgewichtige parallelität.
 - Speicher Zugriff zwischen *goroutines* muss synchronisiert werden um race conditions zu veremeiden.
 
-### `Happens-before Relationship`
+### Happens-before Relationship
 
 - Das Memory Model definiert welche operationen garantiert sichtbar für andere *goroutinen* ist.
 - Falls eine Aktion vor einer anderen passiert, dann wird garantiert das der nächste diese sieht.
 
-### `Atomic Operations`
+### Atomic Operations
 - Das ```sync/atomic``` package bietet low-level atomaren memory Zugriff mit garantierter visibility.
 
-### `Compiler and CPU Reordering`
+### Compiler and CPU Reordering
 - Das Model erlaubt Compilers und CPUs Instruktionen um zu ordnen solange das happens-before Regel respektiert.
 
-### `Data Races are Bugs`
+### Data Races are Bugs
 - Go behandelt Data races als programmier Errors.
 
 
 
-## `goroutines, channels & select`
+## `goroutines`, `channels` & `select`
 ### `goroutine`
 Eine goroutine beschreibt einen leichtgewichtigen thread welcher von der Go Runtime gemanaged wird.
 Beispiel:
@@ -122,7 +197,13 @@ ch2 := make(chan string)
 }
 ```
 
+
+
 ## `defer`, `panic` und `recover`
+
+### `defer`
+
+In go wird `defer` bei einer Funktion am ende aufgerufen und ist besonders praktisch um verbindungen zu schliessen, zum beispiel beim schreiben von einer Datei der Datenbank. `defer` wird immer aufgerufen, auch wenn die funktion eine panic oder ein error hat. Das bedeutet, selbst wenn man ein Array out of bounds error hat, wird `defer` noch aufgeufen
 
 ### Wann braucht man `panic` ?
 
@@ -145,7 +226,6 @@ func myPanic() {
 
 Um eine panic aufzufangen braucht man `defer` und `recover`.
 
-`defer` wird bei einer Funktion am ende aufgerufen und ist besonders praktisch um verbindungen zu schliessen, zum beispiel beim schreiben von einer Datei der Datenbank. `defer` wird immer aufgerufen, auch wenn die funktion crashed. Das bedeutet, selbst wenn man ein Array out of bounds error hat, wird `defer` noch aufgeufen
 
 Um die `panic` dann abzufagnen braucht man `recover`. Diese wird in der methode, welche mit `defer` aufgerufen wird eingebaut. Mit `recover` kann man dann die nachricht ausgeben.
 
