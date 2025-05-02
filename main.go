@@ -1,33 +1,61 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"hslu-pcp/AdventOfCode"
 	"hslu-pcp/Datastructures"
+	"hslu-pcp/FunctionalPatterns"
 	"hslu-pcp/LanguageDetection"
+	"hslu-pcp/Routines"
+	"os"
+	"strings"
 )
 
-func runAdventOfCode(steps int) int {
-	start := []int{3, 4, 3, 1, 2}
-	return AdventOfCode.Advent(start, steps)
+var demos = map[string]func(){
+	"language":   LanguageDetection.Demo,
+	"advent":     AdventOfCode.Demo,
+	"stacks":     Datastructures.Demo,
+	"functional": FunctionalPatterns.Demo,
+	"routines":   Routines.Demo,
 }
 
-func runLanguageDetection(text string) string {
-	return LanguageDetection.LanguageDetection(text)
+func help() {
+	fmt.Println("Available demos:")
+	for name := range demos {
+		fmt.Printf("- %s\n", name)
+	}
 }
 
 func main() {
-	fmt.Println(runAdventOfCode(50))
-	fmt.Println(runLanguageDetection("The origins of the name Java are not clear. The island could possibly have been named after the jáwa-wut plant, which was said to be common in the island during the time, and that prior to Indianization the island had different names.[5] There are other possible sources: the word jaú and its variations mean beyond or distant.[6] And, in Sanskrit yava means barley, a plant for which the island was famous.[6] Yavadvipa is mentioned in India'stack earliest epic, the Ramayana. Sugriva, the chief of Rama'stack army, dispatched his men to Yavadvipa, the island of Java, in search of Sita.[7] It was hence referred to in India by the Sanskrit name yāvaka dvīpa (dvīpa = island). Java is mentioned in the ancient Tamil text Manimekalai by Chithalai Chathanar which states that Java had a kingdom with a capital called Nagapuram.[8][9][10] Another source states that the word Java is derived from a Proto-Austronesian root word, meaning home.[11] The great island of Iabadiu or Jabadiu was mentioned in Ptolemy'stack Geographia composed around 150 CE in the Roman Empire. Iabadiu is said to mean barley island, to be rich in gold, and have a silver town called Argyra at the west end. The name indicates Java[12] and seems to be derived from the Sanskrit name Java-dvipa (Yavadvipa)."))
-	stack := Datastructures.Stack[int]{}
-	stackList := Datastructures.StackList[int]{}
-	stackList.Push(4)
-	stack.Push(10)
-	stack.Push(20)
-	stack.Pop()
-	fmt.Println(Datastructures.GetStats(&stackList))
-	stack.Pop()
-	fmt.Println(Datastructures.GetStats(&stack))
-	fmt.Println(Datastructures.GetStatsStack(&stack))
-	// fmt.Println(Datastructures.GetStatsStack(&stackList))
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Println("Hello! What program do you want to run?")
+	help()
+
+	for {
+		fmt.Print("Enter demo name (or 'help' or 'exit'): ")
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println("Error reading input:", err)
+			continue
+		}
+
+		input = strings.TrimSpace(strings.ToLower(input))
+
+		switch input {
+		case "exit":
+			fmt.Println("Goodbye!")
+			return
+		case "help":
+			help()
+		default:
+			if demo, ok := demos[input]; ok {
+				fmt.Printf("Running demo: %s\n\n", input)
+				demo()
+				fmt.Println("\nDone.")
+			} else {
+				fmt.Println("Unknown demo. Type 'help' to see available demos.")
+			}
+		}
+	}
 }

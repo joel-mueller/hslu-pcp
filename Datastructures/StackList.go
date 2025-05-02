@@ -10,6 +10,7 @@ type StackList[T any] struct {
 }
 
 func (stack *StackList[T]) Push(value T) {
+	// create a new element and &Element[T] returns the Storage place of this element. We use this then as the new head
 	newElem := &Element[T]{
 		value: value,
 		next:  stack.head,

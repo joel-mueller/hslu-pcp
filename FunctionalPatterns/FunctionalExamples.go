@@ -1,4 +1,4 @@
-package main
+package FunctionalPatterns
 
 import (
 	"fmt"
@@ -20,7 +20,7 @@ func square(val int) int {
 	return val * val
 }
 
-func main() {
+func Demo() {
 	fmt.Println(Apply(double, 4))
 	fmt.Println(Apply(triple, 5))
 	fmt.Print(Apply(square, 4))

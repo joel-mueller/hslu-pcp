@@ -35,7 +35,7 @@ func TestCosineSimilarity_Orthogonal(t *testing.T) {
 	}
 }
 
-func TestGetOccurance_Lowercase(t *testing.T) {
+func TestGetOccurrence_Lowercase(t *testing.T) {
 	text := "abc"
 	result := getOccurrence(text)
 	expected := [26]float64{1, 1, 1}

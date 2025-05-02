@@ -1,4 +1,4 @@
-package main
+package Routines
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 
 // PCP Aufgabe 3 von SW09
 
-func main() {
+func Demo() {
 	fmt.Println("->Now waiting for things to happen")
 
 	stop := make(chan struct{})
