@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"hslu-pcp/AdventOfCode"
+	"hslu-pcp/Bank"
 	"hslu-pcp/Datastructures"
 	"hslu-pcp/FunctionalPatterns"
 	"hslu-pcp/LanguageDetection"
@@ -22,6 +23,7 @@ var demos = map[string]func(){
 	"routines":   Routines.Demo,
 	"panic":      Panic.Demo,
 	"channels":   RoutinesChannels.Demo,
+	"bank":       Bank.Demo,
 }
 
 func help() {
