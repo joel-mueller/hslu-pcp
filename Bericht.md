@@ -130,7 +130,9 @@ fmt.Println(GetStats(&stack))
 
 
 ## `goroutines`, `channels` & `select`
+
 ### `goroutine`
+
 Eine goroutine beschreibt einen leichtgewichtigen thread welcher von der Go Runtime gemanaged wird.
 Beispiel:
 ```go
@@ -146,8 +148,6 @@ func main() {
 	say("hello")
 }
 ```
-
-
 
 ### `channels`
 Channels sind eine typisierte Leitung durch welche man Daten senden und bekommen kann durch den channel operator '<-'.
@@ -218,8 +218,6 @@ ch2 := make(chan string)
     }
 }
 ```
-
-
 
 ## `defer`, `panic` und `recover`
 

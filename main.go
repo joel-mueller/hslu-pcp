@@ -9,6 +9,7 @@ import (
 	"hslu-pcp/LanguageDetection"
 	"hslu-pcp/Panic"
 	"hslu-pcp/Routines"
+	"hslu-pcp/RoutinesChannels"
 	"os"
 	"strings"
 )
@@ -20,6 +21,7 @@ var demos = map[string]func(){
 	"functional": FunctionalPatterns.Demo,
 	"routines":   Routines.Demo,
 	"panic":      Panic.Demo,
+	"channels":   RoutinesChannels.Demo,
 }
 
 func help() {
