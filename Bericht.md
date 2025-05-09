@@ -106,28 +106,106 @@ fmt.Println(GetStats(&stackList))
 fmt.Println(GetStats(&stack))
 ```
 
+## `defer`, `panic` und `recover`
+
+### Was ist `defer` ?
+
+In go wird `defer` bei einer Funktion am ende aufgerufen und ist besonders praktisch um verbindungen zu schliessen, zum beispiel beim schreiben von einer Datei der Datenbank. `defer` wird immer aufgerufen, auch wenn die funktion eine panic oder ein error hat. Das bedeutet, selbst wenn man ein Array out of bounds error hat, wird `defer` noch aufgeufen
+
+Hier ein Beispiel wie wir defer gebraucht haben in der Language Detection:
+
+```go
+func ReadFile(path string) string {
+    file, err := os.Open(path)
+    if err != nil {
+        log.Fatal("Error opening file:", err)
+    }
+    defer func(file *os.File) {
+        err := file.Close()
+        if err != nil {
+            log.Fatal("Error Occurred while trying to clone the file", err)
+        }
+    }(file)
+    // lesen vom file
+```
+
+Wir haben hier eine `defer` funktion definiert, welche sicher ausgeführt wird, sobald ein file da ist und die Methoden fertig ist. Dies ist besonders praktisch, da man die dinge schliessen kann, direkt dan dem man sie geöffnet hat. So hat man besonders leserlichen code und vergisst nichts.
+
+### Wann braucht man `panic` ?
+
+In go wird `panic` gebraucht wenn etwas grosses unerwartetes vorliegt und das Programm nicht weiterfahren kann. `panic` wird von go zum Beispiel bei out of bounds bei einem Array gebraucht. Auch wir können `panic` brauchen, um defensiv zu programmieren und unerwartetes bemerkbar zu machen.
+Folgendes beispiel kommt aus dem Stack und wirft eine Panic wenn das Stack leer ist, und das oberste element gelesen werden will.
+
+```go
+func (stack *Stack[T]) Peek() T {
+    if len(stack.stack) == 0 {
+        panic("stack is empty")
+    }
+    return stack.stack[len(stack.stack)-1]
+}
+
+```
+
+### Wie kann man eine `panic` behandeln oder auffangen?
+
+Um die `panic` dann abzufagnen braucht man `recover` und `defer`. Diese wird in der methode, welche mit `defer` aufgerufen wird eingebaut. Mit `recover` kann man dann die nachricht dann ausgeben.
+
+```go
+func safeRun() {
+    defer handlePanic()
+    outOfBounds()
+}
+func handlePanic() {
+    if r := recover(); r != nil {
+        fmt.Println("Recovered from panic:", r)
+    }
+}
+```
+
 ## The Go Memory Model
 
-### Goroutines and Concurrency
+https://go.dev/ref/mem
 
-- Go verwendet *goroutines* für leichtgewichtige parallelität.
-- Speicher Zugriff zwischen *goroutines* muss synchronisiert werden um race conditions zu veremeiden.
+Wenn eine Goroutine einen Wert in eine Variable schreibt und eine andere Goroutine später diese Variable lesen will, legt das Go Memory modell fest, wann und ob der leser garantiert die Neue liest oder noch die alte. Um diese Garantie zu gewährleisten, gibt es folgende möglichkeiten:
 
-### Happens-before Relationship
+- Channels
+- Ein Mutex (`sync.Mutex`)
+- Atomic Variablen (`sync.Atomic`)
 
-- Das Memory Model definiert welche operationen garantiert sichtbar für andere *goroutinen* ist.
-- Falls eine Aktion vor einer anderen passiert, dann wird garantiert das der nächste diese sieht.
+Waiting groups (`sync.WaitGroup`) sind sehr praktisch, um auf mehrere offene Goroutinen warten, und demnach auf eine Erwähnung wert :)
 
-### Atomic Operations
-- Das ```sync/atomic``` package bietet low-level atomaren memory Zugriff mit garantierter visibility.
+### Synchronisation mit Mutex
 
-### Compiler and CPU Reordering
-- Das Model erlaubt Compilers und CPUs Instruktionen um zu ordnen solange das happens-before Regel respektiert.
+In dem Bank beispiel wurde ein mutex in der Klasse definiert. Dieser soll für den Zugriff auf die Balance vom Bank Account dienen.
 
-### Data Races are Bugs
-- Go behandelt Data races als programmier Errors.
+```go
+type Account struct {
+    balance          int
+    mu               sync.Mutex
+    transactionCount uint64
+}
+```
+
+Um eine Transaktion muss der Lock geholt werden und danach auch wieder geschlossen werden. Das macht man am besten mit `defer`.
+
+```go
+func (acc *Account) Deposit(amount int) {
+    acc.mu.Lock()
+    defer acc.mu.Unlock()
+    acc.balance += amount
+    atomic.AddUint64(&acc.transactionCount, 1)
+}
+```
+
+### Synchronisatzion mit Atomic Variablen
+
+Auch kann man aus einer Variable eine Atomic variable machen. Eine Atomic variable wird als normale variable deklariert. In der Account struct wurde sie als `transactionCount uint64` gespeichert. Diese Variable kann dann mit `atomic.AddUint64(&acc.transactionCount, 1)` um ein erhöht werden.
 
 
+### Waiting Groups
+
+Die Waiting Group ist sehr praktisch, um auf Goroutines zu warten. In der `Demo()` funktion von der bank wurde mit `var wg sync.WaitGroup` eine Wiaint group erstellt. Danach wurde mit
+`wg.Add(2)` der Auftrag gegeben auf Zwei funktionen zu warten. Wenn eine funktion fertig ist, kann sie mit `defer wg.Done()` als fertig gekennzeichnet werden. Am ende der Funktionen kann dann mit `wg.Wait()` gewartet werden. Eine Waiting Group ist mehr gedacht, um auf goroutines zu warten, kann aber auch gebraucht werden um variablen zu synchronisieren.
 
 ## `goroutines`, `channels` & `select`
 
@@ -135,6 +213,7 @@ fmt.Println(GetStats(&stack))
 
 Eine goroutine beschreibt einen leichtgewichtigen thread welcher von der Go Runtime gemanaged wird.
 Beispiel:
+
 ```go
 func say(s string) {
 	for i := 0; i < 5; i++ {
@@ -215,62 +294,6 @@ ch2 := make(chan string)
         case msg2 := <-ch2:
             fmt.Println("Received:", msg2)
         }
-    }
-}
-```
-
-## `defer`, `panic` und `recover`
-
-### Was ist `defer` ?
-
-In go wird `defer` bei einer Funktion am ende aufgerufen und ist besonders praktisch um verbindungen zu schliessen, zum beispiel beim schreiben von einer Datei der Datenbank. `defer` wird immer aufgerufen, auch wenn die funktion eine panic oder ein error hat. Das bedeutet, selbst wenn man ein Array out of bounds error hat, wird `defer` noch aufgeufen
-
-Hier ein Beispiel wie wir defer gebraucht haben in der Language Detection:
-
-```go
-func ReadFile(path string) string {
-    file, err := os.Open(path)
-    if err != nil {
-        log.Fatal("Error opening file:", err)
-    }
-    defer func(file *os.File) {
-        err := file.Close()
-        if err != nil {
-            log.Fatal("Error Occurred while trying to clone the file", err)
-        }
-    }(file)
-    // lesen vom file
-```
-
-Wir haben hier eine `defer` funktion definiert, welche sicher ausgeführt wird, sobald ein file da ist und die Methoden fertig ist. Dies ist besonders praktisch, da man die dinge schliessen kann, direkt dan dem man sie geöffnet hat. So hat man besonders leserlichen code und vergisst nichts.
-
-### Wann braucht man `panic` ?
-
-In go wird `panic` gebraucht wenn etwas grosses unerwartetes vorliegt und das Programm nicht weiterfahren kann. `panic` wird von go zum Beispiel bei out of bounds bei einem Array gebraucht. Auch wir können `panic` brauchen, um defensiv zu programmieren und unerwartetes bemerkbar zu machen.
-Folgendes beispiel kommt aus dem Stack und wirft eine Panic wenn das Stack leer ist, und das oberste element gelesen werden will.
-
-```go
-func (stack *Stack[T]) Peek() T {
-    if len(stack.stack) == 0 {
-        panic("stack is empty")
-    }
-    return stack.stack[len(stack.stack)-1]
-}
-
-```
-
-### Wie kann man eine `panic` behandeln oder auffangen?
-
-Um die `panic` dann abzufagnen braucht man `recover` und `defer`. Diese wird in der methode, welche mit `defer` aufgerufen wird eingebaut. Mit `recover` kann man dann die nachricht dann ausgeben.
-
-```go
-func safeRun() {
-    defer handlePanic()
-    outOfBounds()
-}
-func handlePanic() {
-    if r := recover(); r != nil {
-        fmt.Println("Recovered from panic:", r)
     }
 }
 ```
