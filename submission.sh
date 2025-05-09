@@ -28,8 +28,8 @@ copyToTarget package.sh
 copyToTarget README.md
 copyToTarget Bericht.pdf
 
-echo "Removing existing Targets"
-rm *.zip
+echo "Removing existing Target"
+rm PCP*.zip
 
 echo "Zipping the target folder"
 zip -r "${target_folder}.zip" "$target_folder"

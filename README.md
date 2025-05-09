@@ -42,7 +42,7 @@ Now, you should have a binray file of the application in your directory. To run 
 
 ## Convert the Bericht to PDF Document
 
-Note: To convert the Bericht to a pdf, you need to have `pandoc` and `tectonic` installed.
+> Note: To convert the Bericht to a pdf, you need to have [Pandoc](https://pandoc.org/) and [Tectonic](https://tectonic-typesetting.github.io/en-US/) installed.
 
 ```shell
 ./submission.sh
