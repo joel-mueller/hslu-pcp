@@ -1,35 +1,6 @@
-# Bericht Go
+## Wieso wurde go Entwickelt?
 
-Grober [Themenfokus](https://google.com) pro Sprache…
-Sie bearbeiten 3 bis 7 interessante Sprachkonstrukte
-oder -konzepte
-– Auf welche Konstrukte und Konzepte "Ihrer" Sprache
-gehen Sie im Detail ein?
-– Unser Vorschlag pro Sprache siehe Git-Repo:
-
-Qualität vor Quantität!
-– Wenige Seiten (ca. 2-4) reichen durchaus, max. 5 (bei mehr
-gibt's tendenziell Abzug), Inhaltsverzeichnis nicht nötig
-– Fokus auf wichtige/ interessante/ spezielle SprachEigenschaften! (Was anders als bei Java?!...)
-§ Erwarteter Inhalt (ergänzend zu den Folien):
-– Falls interessant/relevant kurze Infos zu Vision,
-Geschichte & Verbreitung
-– Hauptteil: Die Sprache vorstellen (Ihre 3 bis 7
-Fokuspunkte, inkl. Verweise auf Ihren Demo-Code)
-– Ihr technisches Team-Fazit
-– Persönliches Fazit (je min. 1 Abschnitt pro Team-Mitglied)
-
-# Fokuspunkte
-
-- Defer, panic und recover
-- Goroutines, Channels & Select
-- Structural & Nominal Typing
-- The Go Memory Model
-
-Abgabe: Ihre gewählten 3 bis 7 Fokuspunkte, jeweils
-inkl. kurze Erklärung (stichwortartig, ggf. inkl.kurze
-Pseudo-Code-Sequenzen)
-
+Go wurde ab 2007 bei Google von Robert Griesemer, Rob Pike, und Ken Thompson entwickelt und 2012 veröffentlicht. Die Motivation war es, eine sprache zu entwickeln, welche so schnell ist wie C, so lesbar wie Python und gut ist für nebenläufigkeit. Viele Entwickler von Go waren unglücklich von C++. Mehr informationen gibts auf [Wikipedia Go](https://en.wikipedia.org/wiki/Go_(programming_language)).
 
 ## Structural & Nominal Typing
 
@@ -104,6 +75,8 @@ Die funktion kann jetyt für beide stacks benutzt werden. Siehe der Code auch im
 fmt.Println(GetStats(&stackList))
 fmt.Println(GetStats(&stack))
 ```
+
+Dies hat der Vorteil, das man `structs` aus externen Packages einfach mit `interfaces` Mocken und auch gut Testen kann. Auch Entwurfsmuster wie [Adapter](https://refactoring.guru/design-patterns/adapter) können vereinfacht oder sogar komplett weggelassen werden. Die gefahr kann aber auch sein, das wenn man ein Interface oder eine Implementation ändert, zwei dinge nicht mehr Kompatibel sind und es zu einem Fehler kommt.
 
 ## `defer`, `panic` und `recover`
 
@@ -209,89 +182,60 @@ Die Waiting Group ist sehr praktisch, um auf Goroutines zu warten. In der `Demo(
 
 ### `goroutine`
 
-Eine goroutine beschreibt einen leichtgewichtigen thread welcher von der Go Runtime gemanaged wird.
-Beispiel:
-
-```go
-func say(s string) {
-	for i := 0; i < 5; i++ {
-		time.Sleep(100 * time.Millisecond)
-		fmt.Println(s)
-	}
-}
-
-func main() {
-	go say("world")
-	say("hello")
-}
-```
+Eine goroutine beschreibt einen leichtgewichtigen thread welcher von der Go Runtime gemanaged wird. Jede funktion kann ganz einfach mit `go functionname()` als go routine aufgerufen werden. Hier ein Beispiel von [Goroutine Tour of Go](https://go.dev/tour/concurrency/1).
 
 ### `channels`
-Channels sind eine typisierte Leitung durch welche man Daten senden und bekommen kann durch den channel operator '<-'.
 
-Wie maps und slices müssen channels kreiirt werden bevor diese verwendet werden können
-
-```go
-ch := make(chan int)
-```
-
-Beispiel:
+Channels sind eine typisierte Leitung durch welche man Daten senden und bekommen kann. Ein channel kann ganz einfach mit `c := make(chan int)` erstellt werden. Danach kann ein channel einer Goroutine als parameter mitgegeben werden: `go LongLastingTask(c)`. Channels werden mit `c <- value` geschrieben und mit `value <- c` geholt. Hier ein beispiel aus den übungen. Auch gibt es ein Beispiel von [Channels Tour of Go](https://go.dev/tour/concurrency/2)
 
 ```go
-ch <- v // Send v to channel ch
-v := <-ch // Receive from ch, and assign value to v
-```
-
-```go
-func sum(s []int, c chan int) {
-	sum := 0
-	for _, v := range s {
-		sum += v
-	}
-	c <- sum // send sum to c
-}
-
-func main() {
-	s := []int{7, 2, 8, -9, 4, 0}
-
-	c := make(chan int)
-	go sum(s[:len(s)/2], c)
-	go sum(s[len(s)/2:], c)
-	x, y := <-c, <-c // receive from c
-
-	fmt.Println(x, y, x+y)
+func LongLastingTask(c chan int) {
+    DoBlockingWait(3000)
+    fmt.Print("3000")
+    c <- 3000
 }
 ```
+
+```go
+c := make(chan int)
+go LongLastingTask(c)
+go EvenLongerLastingTask(c)
+s, t := <-c, <-c
+```
+
 
 ### `select`
-Das select statement lässt eine goroutine auf mehrere kommunikations operationen warten.
 
-Ein select blockiert solange bis einer seiner cases ausführbar ist, dann führt es diesen aus. Falls mehrere gleichzeitig ausführbar sind wird zufällig ausgewählt.
+Das select statement lässt eine goroutine auf mehrere kommunikations operationen warten. Ein select blockiert solange bis einer seiner cases ausführbar ist, dann führt es diesen aus. Falls mehrere gleichzeitig ausführbar sind wird zufällig ausgewählt. Hier ein beispiel von [Select Tour of go](https://go.dev/tour/concurrency/6) und hier ein Beispiel wie wir es gebraucht haben in Routines Channels
 
 ```go
-func main() {
-ch1 := make(chan string)
-ch2 := make(chan string)
-
-    // Simulate concurrent operations
-    go func() {
-        time.Sleep(1 * time.Second)
-        ch1 <- "Message from channel 1"
-    }()
-
-    go func() {
-        time.Sleep(2 * time.Second)
-        ch2 <- "Message from channel 2"
-    }()
-
-    // Use select to wait for either channel
-    for i := 0; i < 2; i++ {
+go func() {
+    for {
         select {
-        case msg1 := <-ch1:
-            fmt.Println("Received:", msg1)
-        case msg2 := <-ch2:
-            fmt.Println("Received:", msg2)
+        case <-stop:
+            return
+        default:
+            fmt.Print(".")
+            DoBlockingWait(500)
         }
     }
-}
+}()
 ```
+
+## Technisches Team-Fazit
+
+TODO
+- Speicher Grosse von runntime file, wie ist das?
+- Grosse standard libary
+
+## Persönliches Fazit
+
+- Joel: Ich finde Go eine sehr tolle sprache. Ich habe im Studium viel code in Java und Python geschrieben. Go hat von beiden welten das beste drin, was mich sehr motivierte die sprache zu lernen. Das einzige was ich nicht so gut finde ist das Structural Typing von Interfaces. Dies ist mir etwas zu offen und ich denke es kann auch zu grösseren fehler füren wenn man nicht gut aufpasst. Ich frage mich auch wie es ist ein Grosses Projekt mit Go umzusetzen, was ich aber in Zukunft sicher machen will.
+- Leo: TODO (je min. 1 Abschnitt pro Team-Mitglied)
+
+## Gebrauchte Ressourcen
+
+- [W3 Schools Go](https://www.w3schools.com/go/go_getting_started.php)
+- [Go by example](https://gobyexample.com/)
+- [Tour of go](https://go.dev/tour/welcome/1)
+- [Go Dokumentation](https://go.dev/doc/)

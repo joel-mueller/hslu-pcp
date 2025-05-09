@@ -1,8 +1,5 @@
 # Language Guide
 
-```go
-```
-
 ## Variable Declaration
 
 ```go
@@ -182,7 +179,7 @@ func main() {
 
 ## Go Structs
 
-```shell
+```go
 package main
 import ("fmt")
 
@@ -228,7 +225,7 @@ func printPerson(pers Person) {
 
 Make maps with `var` and `:=`
 
-```shell
+```go
 var a = map[string]string{"brand": "Ford", "model": "Mustang", "year": "1964"}
 b := map[string]int{"Oslo": 1, "Bergen": 2, "Trondheim": 3, "Stavanger": 4}
 fmt.Printf("a\t%v\n", a)
