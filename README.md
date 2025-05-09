@@ -32,3 +32,11 @@ Now, you should have a binray file of the application in your directory. To run 
 ```shell
 ./hslu-pcp
 ```
+
+## Convert the Bericht to PDF Document
+
+Note: To convert the Bericht to a pdf, you need to have `pandoc` and `tectonic` installed.
+
+```shell
+./submission.sh
+```
