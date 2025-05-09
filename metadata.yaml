@@ -10,3 +10,4 @@ geometry:
   - bottom=1in
 toc: false
 papersize: a4
+colorlinks: true

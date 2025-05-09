@@ -1,12 +1,11 @@
 # Bericht Go
 
-Grober Themenfokus pro Sprache…
+Grober [Themenfokus](https://google.com) pro Sprache…
 Sie bearbeiten 3 bis 7 interessante Sprachkonstrukte
 oder -konzepte
 – Auf welche Konstrukte und Konzepte "Ihrer" Sprache
 gehen Sie im Detail ein?
 – Unser Vorschlag pro Sprache siehe Git-Repo:
-
 
 Qualität vor Quantität!
 – Wenige Seiten (ca. 2-4) reichen durchaus, max. 5 (bei mehr
@@ -143,7 +142,6 @@ func (stack *Stack[T]) Peek() T {
     }
     return stack.stack[len(stack.stack)-1]
 }
-
 ```
 
 ### Wie kann man eine `panic` behandeln oder auffangen?
