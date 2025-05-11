@@ -1,4 +1,4 @@
-package Panic
+package DELETEME
 
 import (
 	"fmt"

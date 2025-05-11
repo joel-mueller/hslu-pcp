@@ -117,17 +117,17 @@ func (stack *Stack[T]) Peek() T {
 
 ### Wie kann man eine `panic` behandeln oder auffangen?
 
-Um die `panic` wieder aufzufangen, benötigt man `recover` und `defer`. Wenn man eine `panic` erwartet kann eine funktion mit `defer` danach aufgerufen werden. Diese kann dann mit `recover` den error auffangen und ausgeben. Folgendes Beispiel kommt aus **Panic**.
+Um die `panic` wieder aufzufangen, benötigt man `recover` und `defer`. Wenn man eine `panic` erwartet kann eine funktion mit `defer` danach aufgerufen werden. Diese kann dann mit `recover` den error auffangen und ausgeben. Folgendes Beispiel kommt aus **Datastructures**, aus einem der Unittests von dem `Stack`.
 
 ```go
-func safeRun() {
-    defer handlePanic()
-    outOfBounds()
-}
-func handlePanic() {
-    if r := recover(); r != nil {
-        fmt.Println("Recovered from panic:", r)
-    }
+func TestPopOnEmptyPanics(t *testing.T) {
+    defer func() {
+        if r := recover(); r == nil {
+            t.Error("Expected panic on Pop from empty stack")
+        }
+    }()
+    s := Stack[int]{}
+    s.Pop()
 }
 ```
 
@@ -246,5 +246,4 @@ TODO
 - **Bank**: Beispiel Transaktionen von einem Bankkonto für das Go Memeory Modell
 - **Datastructures**: PCP-Übung Woche 1: Einstieg - C & Java revisited, 2. Aufgabe: ADT Stack in C (Array-Implementierung)
 - **LanguageDetection**: Programmierübung zu Clojure Woche 2, 7. Aufgabe
-- **Panic**: Beispiel auffangen von `panic`
 - **Routines**: PCP-Übung zu Java 8, Teil 3 + 4 (Woche 9), 3. CompletableFuture mit zwei nebenläufigen Tasks
