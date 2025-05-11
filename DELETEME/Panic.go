@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func Demo() {
+func Demooo() {
 	safeRun(outOfBounds)
 	fmt.Println("Program continues after panic is recovered.")
 	safeRun(myPanic)
