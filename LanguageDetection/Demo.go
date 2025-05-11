@@ -4,6 +4,8 @@ import (
 	"fmt"
 )
 
+// Programmierübung zu Clojure Woche 2, 7. Aufgabe
+
 func RunLanguage(filename string) {
 	PathToFiles := "LanguageDetection/"
 	content := ReadFile(PathToFiles + filename)

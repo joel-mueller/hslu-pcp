@@ -6,6 +6,8 @@ import (
 	"sync/atomic"
 )
 
+// Beispiel Transaktionen von einem Bankkonto für das Go Memory Modell
+
 type Account struct {
 	balance          int
 	mu               sync.Mutex

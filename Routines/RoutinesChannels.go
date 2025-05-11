@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// PCP Aufgabe 3 von SW09
+// PCP-Übung zu Java 8, Teil 3 + 4 (Woche 9), 3. CompletableFuture mit zwei nebenläufigen Tasks
 
 func Demo() {
 	fmt.Println("->Now waiting for things to happen")

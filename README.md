@@ -4,11 +4,11 @@ Joel Müller und Leo Hrvat
 
 ## TODO vor abgabe
 
-- [ ] Code snippets nochmals prüfen die im bericht drin sind
+- [x] Code snippets nochmals prüfen die im bericht drin sind
 - [x] Rechtschreibung prüfen bericht
 - [ ] TODOs im bericht fertig machen
-- [ ] Uber code drüber schauen und evt noch mehr tests schreiben
-- [ ] In den code beispielen die von den uebungen sind noch bennenen
+- [x] Uber code drüber schauen und evt noch mehr tests schreiben
+- [x] In den code beispielen die von den uebungen sind noch bennenen
 - [x] Search and replace für doppel s
 
 ## Prerequisites

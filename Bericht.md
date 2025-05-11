@@ -42,7 +42,7 @@ Diese Funktion kann Statistiken aus dem Stack ausgeben, aber nicht aus der Stack
 stack := Stack[int]{}
 stackList := StackList[int]{}
 fmt.Println(GetStatsStack(&stack))
-fmt.Println(GetStatsStack(&stackList)) // error, StackList ist nicht vom Typ Stack
+// fmt.Println(GetStatsStack(&stackList)) // error, StackList ist nicht vom Typ Stack
 ```
 
 ### Structural Typing
@@ -125,7 +125,7 @@ func TestPopOnEmptyPanics(t *testing.T) {
         if r := recover(); r == nil {
             t.Error("Expected panic on Pop from empty stack")
         }
-    }()
+	}()
     s := Stack[int]{}
     s.Pop()
 }
@@ -197,8 +197,10 @@ func LongLastingTask(c chan int) {
 
 ```go
 c := make(chan int)
+
 go LongLastingTask(c)
 go EvenLongerLastingTask(c)
+
 s, t := <-c, <-c
 ```
 
@@ -243,7 +245,7 @@ TODO
 ## Übersicht Codebeispiele
 
 - **AdventOfCode**: Programmierübung zu Clojure Woche 2, 5. Aufgabe
-- **Bank**: Beispiel Transaktionen von einem Bankkonto für das Go Memeory Modell
+- **Bank**: Beispiel Transaktionen von einem Bankkonto für das Go Memory Modell
 - **Datastructures**: PCP-Übung Woche 1: Einstieg - C & Java revisited, 2. Aufgabe: ADT Stack in C (Array-Implementierung)
 - **LanguageDetection**: Programmierübung zu Clojure Woche 2, 7. Aufgabe
 - **Routines**: PCP-Übung zu Java 8, Teil 3 + 4 (Woche 9), 3. CompletableFuture mit zwei nebenläufigen Tasks

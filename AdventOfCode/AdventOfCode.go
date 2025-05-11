@@ -1,5 +1,9 @@
 package AdventOfCode
 
+import "fmt"
+
+// Programmierübung zu Clojure Woche 2, 5. Aufgabe
+
 func Advent(start []int, steps int) int {
 	var storage = make(map[int]int)
 	for i := 0; i < 9; i++ {
@@ -23,4 +27,10 @@ func Advent(start []int, steps int) int {
 		size += storage[i]
 	}
 	return size
+}
+
+func Demo() {
+	steps := 30
+	start := []int{3, 4, 3, 1, 2}
+	fmt.Printf("The slice is %v big\n", Advent(start, steps))
 }
