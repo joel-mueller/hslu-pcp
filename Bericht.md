@@ -226,9 +226,13 @@ go func() {
 
 ## Technisches Team-Fazit
 
-TODO
-- Speicher Grosse von runntime file, wie ist das?
-- Grosse standard libary
+Anstatt wie in vielen anderen Sprachen Schnittstellen explizit zu implementieren, genügt es in Go, dass ein Typ die benötigten Methoden einer Schnittstelle zur Verfügung stellt. Dieses Konzept hat Vor- und Nachteile.
+
+Ein weiteres interessantes Konzept sind die Kontrollmechanismen panic, defer und recover, die einen einfachen Umgang mit Laufzeitfehlern ermöglichen.
+
+Durch die Verwendung von Mutex und atomischen Operationen für die Synchronisation können Race Conditions effizient vermieden werden. Für einfachere Synchronisationsszenarien sind aber auch Goroutinen in Kombination mit Channels eine gute Wahl.
+
+Einen positiven Eindruck hat auch die grosse und gut dokumentierte Standardbibliothek hinterlassen. Ob HTTP-Server, JSON-Verarbeitung, Dateisystemzugriff oder Testframeworks - für nahezu jeden Anwendungsfall gibt es Out-of-the-Box-Unterstützung, was die Entwicklung beschleunigt und die Notwendigkeit externer Abhängigkeiten reduziert.
 
 ## Persönliches Fazit
 
