@@ -4,7 +4,7 @@ Go wurde ab 2007 bei Google von Robert Griesemer, Rob Pike und Ken Thompson entw
 
 ## Structural & Nominal Typing
 
-Go verwendet sowohl strukturelle als auch nominale Typisierung.
+Go verwendet sowohl strukturelle als auch nominale Typisierung. Die Code Beispiele aus diesem Kapitel stammen aus **Datastructures**.
 
 ### Nominal Typing
 
@@ -84,7 +84,7 @@ Structural Typing hat den Vorteil, dass man die `structs` externer Packages einf
 
 In Go wird `defer` immer am Ende einer Funktion aufgerufen und ist besonders nützlich, um Verbindungen zu schliessen, z.B. beim Schreiben in eine Datei oder in eine Datenbank. `defer` wird immer aufgerufen, auch wenn die Funktion eine Panic oder einen Error hat. D.h. selbst wenn man einen Array out of bounds error hat, wird `defer` immer noch aufgerufen.
 
-Hier ein Beispiel, wie `defer` in der Language Detection verwendet wurde.
+Hier ein Beispiel, wie `defer` in **LanguageDetection** verwendet wurde.
 
 ```go
 func ReadFile(path string) string {
@@ -104,7 +104,7 @@ func ReadFile(path string) string {
 ### Wann braucht man `panic` ?
 
 In Go wird `panic` benutzt, wenn etwas grosses Unerwartetes passiert und das Programm nicht weiterlaufen kann. `panic` wird von Go z.B. bei out of bounds in einem Array gebraucht. Wir können `panic` auch benutzen, um defensiv zu programmieren und unerwartete Dinge anzuzeigen.
-Die folgende Methode liest den obersten Wert aus dem Stack und löst eine Panic aus, wenn der Stack leer ist.
+Die folgende Methode liest den obersten Wert aus dem Stack und löst eine Panic aus, wenn der Stack leer ist. Die stammt aus **Datastructures**.
 
 ```go
 func (stack *Stack[T]) Peek() T {
@@ -117,7 +117,7 @@ func (stack *Stack[T]) Peek() T {
 
 ### Wie kann man eine `panic` behandeln oder auffangen?
 
-Um die `panic` wieder aufzufangen, benötigt man `recover` und `defer`. Wenn man eine `panic` erwartet kann eine funktion mit `defer` danach aufgerufen werden. Diese kann dann mit `recover` den error auffangen und ausgeben.
+Um die `panic` wieder aufzufangen, benötigt man `recover` und `defer`. Wenn man eine `panic` erwartet kann eine funktion mit `defer` danach aufgerufen werden. Diese kann dann mit `recover` den error auffangen und ausgeben. Folgendes Beispiel kommt aus **Panic**.
 
 ```go
 func safeRun() {
@@ -139,6 +139,8 @@ Wenn eine Goroutine einen Wert in eine Variable schreibt und eine andere Gorouti
 - Atomic Variablen (`sync.Atomic`)
 
 Waiting Groups (`sync.WaitGroup`) sind sehr praktisch, um auf mehrere offene Goroutinen zu warten, und daher eine Erwähnung wert :)
+
+Die Beispiele in diesem Kapitel kommen aus **Bank**.
 
 ### Synchronisation mit Mutex
 
@@ -174,6 +176,8 @@ Die Waiting Group ist sehr nützlich, um auf Routinen zu warten. In der `Demo()`
 Weitere Informationen zum Go Memory Modell gibts auf [The Go Memory Model] (https://go.dev/ref/mem).
 
 ## `goroutines`, `channels` & `select`
+
+Die Code Beispiele in diesem Kapitel kommen aus **Routines**.
 
 ### `goroutine`
 
@@ -235,3 +239,12 @@ TODO
 - [Go by example](https://gobyexample.com/)
 - [Tour of go](https://go.dev/tour/welcome/1)
 - [Go Dokumentation](https://go.dev/doc/)
+
+## Übersicht Codebeispiele
+
+- **AdventOfCode**: Programmierübung zu Clojure Woche 2, 5. Aufgabe
+- **Bank**: Beispiel Transaktionen von einem Bankkonto für das Go Memeory Modell
+- **Datastructures**: PCP-Übung Woche 1: Einstieg - C & Java revisited, 2. Aufgabe: ADT Stack in C (Array-Implementierung)
+- **LanguageDetection**: Programmierübung zu Clojure Woche 2, 7. Aufgabe
+- **Panic**: Beispiel auffangen von `panic`
+- **Routines**: PCP-Übung zu Java 8, Teil 3 + 4 (Woche 9), 3. CompletableFuture mit zwei nebenläufigen Tasks

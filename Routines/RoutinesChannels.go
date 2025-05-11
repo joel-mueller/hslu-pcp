@@ -1,4 +1,4 @@
-package RoutinesChannels
+package Routines
 
 import (
 	"fmt"

@@ -5,12 +5,11 @@ import (
 	"fmt"
 	"hslu-pcp/AdventOfCode"
 	"hslu-pcp/Bank"
+	"hslu-pcp/DELETEME"
 	"hslu-pcp/Datastructures"
-	"hslu-pcp/FunctionalPatterns"
 	"hslu-pcp/LanguageDetection"
 	"hslu-pcp/Panic"
 	"hslu-pcp/Routines"
-	"hslu-pcp/RoutinesChannels"
 	"os"
 	"strings"
 )
@@ -19,10 +18,10 @@ var demos = map[string]func(){
 	"language":   LanguageDetection.Demo,
 	"advent":     AdventOfCode.Demo,
 	"stacks":     Datastructures.Demo,
-	"functional": FunctionalPatterns.Demo,
-	"routines":   Routines.Demo,
+	"functional": DELETEME.Demo,
+	"routines":   DELETEME.Demo,
 	"panic":      Panic.Demo,
-	"channels":   RoutinesChannels.Demo,
+	"channels":   Routines.Demo,
 	"bank":       Bank.Demo,
 }
 
