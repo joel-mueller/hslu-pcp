@@ -8,6 +8,8 @@ Joel Müller und Leo Hrvat
 - [ ] Rechtschreibung prüfen bericht
 - [ ] TODos im bericht fertig machen
 - [ ] Uber code drüber schauen und evt noch mehr tests schreiben
+- [ ] In den code beispielen die von den uebungen sind noch bennenen
+- [ ] Search and replace für doppel s
 
 ## Prerequisites
 

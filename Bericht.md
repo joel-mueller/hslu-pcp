@@ -1,17 +1,17 @@
-## Wieso wurde go Entwickelt?
+## Wieso wurde Go Entwickelt?
 
-Go wurde ab 2007 bei Google von Robert Griesemer, Rob Pike, und Ken Thompson entwickelt und 2012 veröffentlicht. Die Motivation war es, eine sprache zu entwickeln, welche so schnell ist wie C, so lesbar wie Python und gut ist für nebenläufigkeit. Viele Entwickler von Go waren unglücklich von C++. Mehr informationen gibts auf [Wikipedia Go](https://en.wikipedia.org/wiki/Go_(programming_language)).
+Go wurde ab 2007 bei Google von Robert Griesemer, Rob Pike und Ken Thompson entwickelt und 2012 veröffentlicht. Die Motivation war, eine Sprache zu entwickeln, die so schnell wie C, so lesbar wie Python und gut für Nebenläufigkeit ist. Viele Go-Entwickler waren mit C++ unzufrieden. Weitere Informationen dazu gibt es auf [Wikipedia Go](https://en.wikipedia.org/wiki/Go_(programming_language)).
 
 ## Structural & Nominal Typing
 
-Go verwendet sowohl Structural, als auch Nominal Typing.
+Go verwendet sowohl strukturelle als auch nominale Typisierung.
 
 ### Nominal Typing
 
-Bei Nominal Typing werden zwei strukturen oder klassen nicht als gleich oder Kompatibel angeseehen, auch wenn sie die gleichen datentypen und Methoden haben.
-In der sprache `go` ist das bei allen primitiven datentypen und structs so. Das bedeutet, wenn ich in go eine funktion habe, welche eine struct oder ein pointer zu einer struct nimmt, dann muss ich genau eine solche struct übergeben nicht eine andere struct, welche aber die gleichen namen hat und die selben attributten.
+Beim Nominal Typing werden zwei Strukturen oder Klassen nicht als gleich oder kompatibel angesehen, auch wenn sie die gleichen Datentypen und Methoden haben.
+In Go gilt dies für alle primitiven Datentypen und Strukturen. Einer Funktion, die eine Struktur oder einen Zeiger auf eine Struktur als Parameter hat, muss genau eine solche Struktur übergeben werden. Eine andere Struktur, die aber den gleichen Methodennamen und die gleichen Attribute hat, kann dieser Funktion nicht übergeben werden.
 
-Wir haben hier zwei stacks. Eines hat intern ein slice und das andere eine Linked list. 
+Wir haben hier zwei Stacks. Einer hat intern ein Slice und der andere eine Linked List.
 
 ```go
 type Stack[T any] struct {
@@ -25,7 +25,7 @@ type StackList[T any] struct {
 }
 ```
 
-Ich schreibe eine Methode, welche die statistik über das stack ausgibt. Die Methode soll für das `Stack` funktionieren. 
+Dies ist eine Funktion, die Statistiken über den Stack ausgibt. Die Methode soll für den Stack funktionieren.
 
 ```go
 func GetStatsStack[T any](stack *Stack[T]) string {
@@ -36,7 +36,7 @@ func GetStatsStack[T any](stack *Stack[T]) string {
 }
 ```
 
-Ich kann die Statistik vom Stack ausgeben, aber nicht vom StackList, das es nicht der gleiche Typ ist.
+Diese Funktion kann Statistiken aus dem Stack ausgeben, aber nicht aus der StackList, da es sich um einen anderen Typ handelt.
 
 ```go
 stack := Stack[int]{}
@@ -47,8 +47,8 @@ fmt.Println(GetStatsStack(&stackList)) // error, StackList ist nicht vom Typ Sta
 
 ### Structural Typing
 
-Go neben Nominal Typing, verwendet go auch structural Typing. Structural Typing wird in go aussschliesslich bei interfaces verwendet. Wenn eine struct in go die gleichen methoden, wie ein interface hat, hat die struct auch das interface.
-Wir schreiben also ein Interface, welche für Datenstrukturen gedacht ist.
+Neben Nominal Typing verwendet Go auch Structural Typing. Structural Typing wird in Go ausschliesslich für Interfaces verwendet. Wenn eine Struktur in Go die gleichen Methoden wie ein Interface hat, hat die Struktur auch automatisch das Interface implementiert.
+Das folgende Beispiel ist ein Interface für Datenstrukturen.
 
 ```go
 type Datastructures interface {
@@ -57,8 +57,8 @@ type Datastructures interface {
 }
 ```
 
-Da sowohl `Stack` als auch `StackList` diese beiden funktionen haben, implementieren sie automaisch das Interface `Datastructure`.
-Wir schreiben also folgende Funktion, welche keines der beiden Stacks nimmt, sondern ein interface, welches die methoden besitzt, welche sowhol `Stack` als auch `StackList` implementiert hat.
+Da sowohl `Stack` als auch `StackList` diese beiden Funktionen besitzen, implementieren sie automatisch das Interface `Datastructure`.
+Das folgende Beispiel ist eine Funktion, die keines der beiden Stacks als Parameter annimmt, sondern das `Datastructure` Interface. Die Methoden des `Datastructure` Interface wurden sowohl von `Stack` als auch von `StackList` implementiert.
 
 ```go
 func GetStats(datastructures Datastructures) string {
@@ -69,22 +69,22 @@ func GetStats(datastructures Datastructures) string {
 }
 ```
 
-Die funktion kann jetyt für beide stacks benutzt werden. Siehe der Code auch im Ordner Datastructures.
+Der Funktion kann sowohl ein `Stack` als auch eine `StackList` übergeben werden.
 
 ```go
 fmt.Println(GetStats(&stackList))
 fmt.Println(GetStats(&stack))
 ```
 
-Dies hat der Vorteil, das man `structs` aus externen Packages einfach mit `interfaces` Mocken und auch gut Testen kann. Auch Entwurfsmuster wie [Adapter](https://refactoring.guru/design-patterns/adapter) können vereinfacht oder sogar komplett weggelassen werden. Die gefahr kann aber auch sein, das wenn man ein Interface oder eine Implementation ändert, zwei dinge nicht mehr Kompatibel sind und es zu einem Fehler kommt.
+Structural Typing hat den Vorteil, dass man die `structs` externer Packages einfach mit `interfaces` mocken und auch gut testen kann. Auch Entwurfsmuster wie [Adapter](https://refactoring.guru/design-patterns/adapter) können vereinfacht oder sogar ganz weggelassen werden. Die Gefahr kann aber auch sein, dass wenn man ein Interface oder eine Implementation ändert, zwei Dinge nicht mehr kompatibel sind und ein Fehler auftritt.
 
 ## `defer`, `panic` und `recover`
 
-### Was ist `defer` ?
+### Was ist `defer`?
 
-In go wird `defer` bei einer Funktion am ende aufgerufen und ist besonders praktisch um verbindungen zu schliessen, zum beispiel beim schreiben von einer Datei der Datenbank. `defer` wird immer aufgerufen, auch wenn die funktion eine panic oder ein error hat. Das bedeutet, selbst wenn man ein Array out of bounds error hat, wird `defer` noch aufgeufen
+In Go wird `defer` immer am Ende einer Funktion aufgerufen und ist besonders nützlich, um Verbindungen zu schliessen, z.B. beim Schreiben in eine Datei oder in eine Datenbank. `defer` wird immer aufgerufen, auch wenn die Funktion eine Panic oder einen Error hat. D.h. selbst wenn man einen Array out of bounds error hat, wird `defer` immer noch aufgerufen.
 
-Hier ein Beispiel wie wir defer gebraucht haben in der Language Detection:
+Hier ein Beispiel, wie `defer` in der Language Detection verwendet wurde.
 
 ```go
 func ReadFile(path string) string {
@@ -101,12 +101,10 @@ func ReadFile(path string) string {
     // lesen vom file
 ```
 
-Wir haben hier eine `defer` funktion definiert, welche sicher ausgeführt wird, sobald ein file da ist und die Methoden fertig ist. Dies ist besonders praktisch, da man die dinge schliessen kann, direkt dan dem man sie geöffnet hat. So hat man besonders leserlichen code und vergisst nichts.
-
 ### Wann braucht man `panic` ?
 
-In go wird `panic` gebraucht wenn etwas grosses unerwartetes vorliegt und das Programm nicht weiterfahren kann. `panic` wird von go zum Beispiel bei out of bounds bei einem Array gebraucht. Auch wir können `panic` brauchen, um defensiv zu programmieren und unerwartetes bemerkbar zu machen.
-Folgendes beispiel kommt aus dem Stack und wirft eine Panic wenn das Stack leer ist, und das oberste element gelesen werden will.
+In Go wird `panic` benutzt, wenn etwas grosses Unerwartetes passiert und das Programm nicht weiterlaufen kann. `panic` wird von Go z.B. bei out of bounds in einem Array gebraucht. Wir können `panic` auch benutzen, um defensiv zu programmieren und unerwartete Dinge anzuzeigen.
+Die folgende Methode liest den obersten Wert aus dem Stack und löst eine Panic aus, wenn der Stack leer ist.
 
 ```go
 func (stack *Stack[T]) Peek() T {
@@ -119,7 +117,7 @@ func (stack *Stack[T]) Peek() T {
 
 ### Wie kann man eine `panic` behandeln oder auffangen?
 
-Um die `panic` dann abzufagnen braucht man `recover` und `defer`. Diese wird in der methode, welche mit `defer` aufgerufen wird eingebaut. Mit `recover` kann man dann die nachricht dann ausgeben.
+Um die `panic` wieder aufzufangen, benötigt man `recover` und `defer`. Wenn man eine `panic` erwartet kann eine funktion mit `defer` danach aufgerufen werden. Diese kann dann mit `recover` den error auffangen und ausgeben.
 
 ```go
 func safeRun() {
@@ -135,19 +133,16 @@ func handlePanic() {
 
 ## The Go Memory Model
 
-https://go.dev/ref/mem
-
-Wenn eine Goroutine einen Wert in eine Variable schreibt und eine andere Goroutine später diese Variable lesen will, legt das Go Memory modell fest, wann und ob der leser garantiert die Neue liest oder noch die alte. Um diese Garantie zu gewährleisten, gibt es folgende möglichkeiten:
-
+Wenn eine Goroutine einen Wert in eine Variable schreibt und eine andere Goroutine diese Variable später lesen möchte, legt das Go Memory Modell fest, wann und ob der Leser garantiert den neuen oder noch den alten Wert liest. Um diese Garantie zu gewährleisten, gibt es folgende Möglichkeiten:
 - Channels
 - Ein Mutex (`sync.Mutex`)
 - Atomic Variablen (`sync.Atomic`)
 
-Waiting groups (`sync.WaitGroup`) sind sehr praktisch, um auf mehrere offene Goroutinen warten, und demnach auf eine Erwähnung wert :)
+Waiting Groups (`sync.WaitGroup`) sind sehr praktisch, um auf mehrere offene Goroutinen zu warten, und daher eine Erwähnung wert :)
 
 ### Synchronisation mit Mutex
 
-In dem Bank beispiel wurde ein mutex in der Klasse definiert. Dieser soll für den Zugriff auf die Balance vom Bank Account dienen.
+Im Beispiel Bank wurde in der Klasse ein Mutex definiert. Dieser wird für den Zugriff auf den Saldo des Bankkontos verwendet.
 
 ```go
 type Account struct {
@@ -157,7 +152,7 @@ type Account struct {
 }
 ```
 
-Um eine Transaktion muss der Lock geholt werden und danach auch wieder geschlossen werden. Das macht man am besten mit `defer`.
+Um eine Transaktion durchzuführen, muss das Lock geöffnet und wieder geschlossen werden. Dies geschieht am besten mit `defer`.
 
 ```go
 func (acc *Account) Deposit(amount int) {
@@ -170,23 +165,23 @@ func (acc *Account) Deposit(amount int) {
 
 ### Synchronisatzion mit Atomic Variablen
 
-Auch kann man aus einer Variable eine Atomic variable machen. Eine Atomic variable wird als normale variable deklariert. In der Account struct wurde sie als `transactionCount uint64` gespeichert. Diese Variable kann dann mit `atomic.AddUint64(&acc.transactionCount, 1)` um ein erhöht werden.
-
+In Go ist es möglich, eine Variable in eine atomare Variable umzuwandeln. Eine Atomic Variable wird wie eine normale Variable deklariert. In der Struktur Account wird sie als `transactionCount uint64` gespeichert. Diese Variable kann dann mit `atomic.AddUint64(&acc.transactionCount, 1)` sicher um eins erhöht werden.
 
 ### Waiting Groups
 
-Die Waiting Group ist sehr praktisch, um auf Goroutines zu warten. In der `Demo()` funktion von der bank wurde mit `var wg sync.WaitGroup` eine Wiaint group erstellt. Danach wurde mit
-`wg.Add(2)` der Auftrag gegeben auf Zwei funktionen zu warten. Wenn eine funktion fertig ist, kann sie mit `defer wg.Done()` als fertig gekennzeichnet werden. Am ende der Funktionen kann dann mit `wg.Wait()` gewartet werden. Eine Waiting Group ist mehr gedacht, um auf goroutines zu warten, kann aber auch gebraucht werden um variablen zu synchronisieren.
+Die Waiting Group ist sehr nützlich, um auf Routinen zu warten. In der `Demo()` Funktion der Bank wurde eine Waiting Group mit `var wg sync.WaitGroup` erstellt. Danach wurde mit `wg.Add(2)` auf zwei Funktionen gewartet. Wenn eine Funktion fertig ist, kann sie mit `defer wg.Done()` als fertig markiert werden. Am Ende der Funktionen kann mit `wg.Wait()` gewartet werden.
+
+Weitere Informationen zum Go Memory Modell gibts auf [The Go Memory Model] (https://go.dev/ref/mem).
 
 ## `goroutines`, `channels` & `select`
 
 ### `goroutine`
 
-Eine goroutine beschreibt einen leichtgewichtigen thread welcher von der Go Runtime gemanaged wird. Jede funktion kann ganz einfach mit `go functionname()` als go routine aufgerufen werden. Hier ein Beispiel von [Goroutine Tour of Go](https://go.dev/tour/concurrency/1).
+Eine Go-Routine beschreibt einen leichtgewichtigen Thread, der von der Go-Runtime verwaltet wird. Jede Funktion kann einfach mit `go functionname()` als Go-Routine aufgerufen werden. Hier ist ein Beispiel von [Goroutine Tour of Go](https://go.dev/tour/concurrency/1).
 
 ### `channels`
 
-Channels sind eine typisierte Leitung durch welche man Daten senden und bekommen kann. Ein channel kann ganz einfach mit `c := make(chan int)` erstellt werden. Danach kann ein channel einer Goroutine als parameter mitgegeben werden: `go LongLastingTask(c)`. Channels werden mit `c <- value` geschrieben und mit `value <- c` geholt. Hier ein beispiel aus den übungen. Auch gibt es ein Beispiel von [Channels Tour of Go](https://go.dev/tour/concurrency/2)
+Channels sind typisierte Leitungen, über die Daten gesendet und empfangen werden können. Ein Channel kann einfach erstellt werden mit `c := make(chan int)`. Danach kann ein Channel als Parameter an eine Routine übergeben werden: `go LongLastingTask(c)`. Werte werden mit `c <- value` in Channels geschrieben und mit `value <- c` geholt. Hier ist ein Beispiel aus den Übungen.
 
 ```go
 func LongLastingTask(c chan int) {
@@ -203,10 +198,11 @@ go EvenLongerLastingTask(c)
 s, t := <-c, <-c
 ```
 
+Hier ein Beispiel von [Channels Tour of Go](https://go.dev/tour/concurrency/2).
 
 ### `select`
 
-Das select statement lässt eine goroutine auf mehrere kommunikations operationen warten. Ein select blockiert solange bis einer seiner cases ausführbar ist, dann führt es diesen aus. Falls mehrere gleichzeitig ausführbar sind wird zufällig ausgewählt. Hier ein beispiel von [Select Tour of go](https://go.dev/tour/concurrency/6) und hier ein Beispiel wie wir es gebraucht haben in Routines Channels
+Die Select-Anweisung lässt eine Routine auf mehrere Kommunikationsoperationen warten. `select` blockiert, bis einer seiner `case`'s ausführbar ist, und führt ihn dann aus. Sind mehrere gleichzeitig ausführbar, wird zufällig ausgewählt. Hier ein Beispiel von [Select Tour of go] (https://go.dev/tour/concurrency/6) und hier ein Beispiel, wie `select` in der Übung verwendet wurde.
 
 ```go
 go func() {
@@ -230,7 +226,7 @@ TODO
 
 ## Persönliches Fazit
 
-- Joel: Ich finde Go eine sehr tolle sprache. Ich habe im Studium viel code in Java und Python geschrieben. Go hat von beiden welten das beste drin, was mich sehr motivierte die sprache zu lernen. Das einzige was ich nicht so gut finde ist das Structural Typing von Interfaces. Dies ist mir etwas zu offen und ich denke es kann auch zu grösseren fehler füren wenn man nicht gut aufpasst. Ich frage mich auch wie es ist ein Grosses Projekt mit Go umzusetzen, was ich aber in Zukunft sicher machen will.
+- Joel: Ich finde, dass Go eine tolle Sprache ist. Während meines Studiums habe ich viel Code in Java und Python geschrieben. Go hat das Beste aus beiden Welten, was mich sehr motiviert hat, die Sprache zu lernen. Das Einzige, was ich nicht so gut finde, ist das Structural Typing von Interfaces. Es ist mir ein bisschen zu offen und ich denke, es kann auch zu grösseren Fehlern führen, wenn man nicht aufpasst. Ich frage mich auch, wie es ist, ein grosses Projekt mit Go zu machen, aber das werde ich sicher in der Zukunft machen.
 - Leo: TODO (je min. 1 Abschnitt pro Team-Mitglied)
 
 ## Gebrauchte Ressourcen
