@@ -6,6 +6,7 @@ import (
 	"hslu-pcp/AdventOfCode"
 	"hslu-pcp/Bank"
 	"hslu-pcp/Datastructures"
+	"hslu-pcp/EndDemo"
 	"hslu-pcp/LanguageDetection"
 	"hslu-pcp/Routines"
 	"os"
@@ -18,6 +19,7 @@ var demos = map[string]func(){
 	"stacks":   Datastructures.Demo,
 	"routines": Routines.Demo,
 	"bank":     Bank.Demo,
+	"end":      EndDemo.Demo,
 }
 
 func help() {
