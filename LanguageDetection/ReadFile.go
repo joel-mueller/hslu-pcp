@@ -1,7 +1,7 @@
 package LanguageDetection
 
 import (
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 )
@@ -18,7 +18,7 @@ func ReadFile(path string) string {
 		}
 	}(file)
 
-	bytes, err := ioutil.ReadAll(file)
+	bytes, err := io.ReadAll(file)
 	if err != nil {
 		log.Fatal("Error reading file:", err)
 	}
