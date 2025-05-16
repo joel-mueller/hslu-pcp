@@ -2,6 +2,7 @@ package EndDemo
 
 import (
 	"fmt"
+	"math/rand"
 	"sync"
 	"time"
 )
@@ -9,8 +10,11 @@ import (
 func Demo() {
 	defer fmt.Println("Final Task finished.")
 
+	// Seed the random number generator
+	rand.New(rand.NewSource(time.Now().UnixNano()))
+
 	var wg sync.WaitGroup
-	wg.Add(3) // ← make room for three Done() calls
+	wg.Add(3)
 
 	c1 := make(chan struct{})
 	c2 := make(chan struct{})
@@ -28,20 +32,36 @@ func Demo() {
 	}()
 	go func() {
 		defer wg.Done()
-		TaskThree() // panic in here will be recovered
+		TaskThree()
 		close(c3)
 	}()
 
-	wg.Wait() // ← block until all three Done()s have run
+	wg.Wait()
 }
 
 func TaskOne() {
 	time.Sleep(2 * time.Second)
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered in Task 1:", r)
+		}
+	}()
+	if rand.Intn(2) == 1 {
+		panic("Task 1 failed unexpectedly")
+	}
 	fmt.Println("Task 1 is done.")
 }
 
 func TaskTwo() {
 	time.Sleep(4 * time.Second)
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered in Task 2:", r)
+		}
+	}()
+	if rand.Intn(2) == 1 {
+		panic("Task 2 failed unexpectedly")
+	}
 	fmt.Println("Task 2 is done.")
 }
 
@@ -52,5 +72,8 @@ func TaskThree() {
 			fmt.Println("Recovered in Task 3:", r)
 		}
 	}()
-	panic("something went wrong in Task 3")
+	if rand.Intn(2) == 1 {
+		panic("Task 3 failed unexpectedly")
+	}
+	fmt.Println("Task 3 is done.")
 }
