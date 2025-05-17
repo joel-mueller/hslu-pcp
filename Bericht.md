@@ -252,3 +252,4 @@ Einen positiven Eindruck hat auch die grosse und gut dokumentierte Standardbibli
 - **Datastructures**: PCP-Übung Woche 1: Einstieg - C & Java revisited, 2. Aufgabe: ADT Stack in C (Array-Implementierung)
 - **LanguageDetection**: Programmierübung zu Clojure Woche 2, 7. Aufgabe
 - **Routines**: PCP-Übung zu Java 8, Teil 3 + 4 (Woche 9), 3. CompletableFuture mit zwei nebenläufigen Tasks
+- **Weather**: Programmierübung zu Modern Java Woche 2, 2. Aufgabe

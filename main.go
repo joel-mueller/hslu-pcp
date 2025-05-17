@@ -9,6 +9,7 @@ import (
 	"hslu-pcp/EndDemo"
 	"hslu-pcp/LanguageDetection"
 	"hslu-pcp/Routines"
+	"hslu-pcp/Weather"
 	"os"
 	"strings"
 )
@@ -20,6 +21,7 @@ var demos = map[string]func(){
 	"routines": Routines.Demo,
 	"bank":     Bank.Demo,
 	"end":      EndDemo.Demo,
+	"weather":  Weather.Demo,
 }
 
 func help() {
