@@ -238,6 +238,7 @@ Einen positiven Eindruck hat auch die grosse und gut dokumentierte Standardbibli
 
 - Joel: Ich finde, dass Go eine tolle Sprache ist. Während meines Studiums habe ich viel Code in Java und Python geschrieben. Go hat das Beste aus beiden Welten, was mich sehr motiviert hat, die Sprache zu lernen. Das Einzige, was ich nicht so gut finde, ist das Structural Typing von Interfaces. Es ist mir ein bisschen zu offen und ich denke, es kann auch zu grösseren Fehlern führen, wenn man nicht aufpasst. Ich frage mich auch, wie es ist, ein grosses Projekt mit Go zu machen, aber das werde ich sicher in der Zukunft machen.
 - Leo: Ich finde, Go ist eine Programmiersprache, die zeigt, dass weniger manchmal mehr ist. Dank ihrer einfachen Syntax war sie sehr leicht zu lernen und ist dennoch äusserst mächtig. Von allen Sprachen, mit denen ich bisher gearbeitet habe (Java, C#, C++, Python, JavaScript/TypeScript), bietet Go für mich mit Abstand das beste Nebenläufigkeitsmodell. Besonders gut gefällt mir auch, dass Go keine Exceptions verwendet, sondern Fehler als Rückgabewerte behandelt. Dadurch wird man gezwungen, sich explizit mit ihnen auseinanderzusetzen. Go ist eine Sprache, die ich in Zukunft gerne sowohl für grosse als auch für kleinere Projekte einsetzen möchte.
+
 ## Gebrauchte Ressourcen
 
 - [W3 Schools Go](https://www.w3schools.com/go/go_getting_started.php)
